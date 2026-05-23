@@ -102,7 +102,7 @@ def main():
         for e in sorted(by_topic[topic], key=lambda x: x["title"].lower()):
             tagstr = (" · tags: " + ", ".join(e["tags"])) if e["tags"] else ""
             summ = (" — " + e["summary"]) if e["summary"] else ""
-            lines.append(f"- **{e['title']}** — `{e['rel']}`{summ}{tagstr}")
+            lines.append(f"- **[{e['title']}]({e['rel']})**{summ}{tagstr}")
         lines.append("")
 
     with open(INDEX, "w", encoding="utf-8") as fh:
