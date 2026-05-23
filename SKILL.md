@@ -47,22 +47,51 @@ source: conversation        # or: web (include URL in References)
 ---
 
 ## Summary
-One short plain-language paragraph — the elevator pitch of the concept.
+One plain-language paragraph — the elevator pitch of the concept. Avoid jargon;
+if a term is unavoidable, gloss it briefly.
 
 ## Details
-The full explanation: nuance, examples, code, derivations, diagrams-as-text.
+The full explanation: nuance, derivations, diagrams-as-text. When the concept is
+technical, include at least one worked example, code block, or diagram — don't
+just describe it abstractly.
 
 ## Key points
-- Bullet facts that are individually testable. These are what the quiz mode draws from.
+- Each bullet is one self-contained, testable fact, phrased so it could stand alone
+  as a quiz question. These are exactly what quiz mode draws from, so favor concrete
+  facts over vague restatements.
 
 ## References
-- Links / sources (URLs for web findings).
+- Links / sources. For `source: web`, a URL is mandatory; include the access date.
 
 ## Related
-- [[other-slug]] links to related entries.
+- `[Other Title](../<other-topic>/<other-slug>.md)` — relative repo-path links, so they
+  click through both on GitHub and in local markdown viewers. Same-topic link drops the
+  `../`: `[Title](<other-slug>.md)`. Always attempt at least one link; if none fit, write
+  "(none yet)" so it's clear the check was done.
 ```
 
 Get today's date with `date +%F` before writing (used for `created`/`updated`).
+
+## Accuracy & sourcing (vet before writing or expanding any entry)
+
+The knowledge base must contain only things that are actually true and traceable —
+never invented detail.
+
+- **Only assert what is verifiable.** A claim is OK to write if it came from (a) the
+  user — stated or explicitly confirmed by them as true, (b) the conversation we just
+  had, or (c) a credible source — official docs, peer-reviewed papers, primary sources,
+  or well-established reference material.
+- **Never fabricate specifics.** Do not invent URLs, citations, version numbers,
+  function/API names, quotes, statistics, or dates. No real value → don't write a
+  plausible-looking one.
+- **When unsure, resolve it — don't guess.** Either verify against the official source
+  (look it up), ask the user, or leave it out. If something is useful but unconfirmed,
+  label it inline ("Unverified —" / "recollection, not confirmed") rather than stating
+  it as fact.
+- **References must be real** — sources actually seen, not reconstructed from memory.
+
+These rules reduce errors but can't make them impossible; prefer verifying load-bearing
+facts against a primary source at store time.
 
 ## Modes
 
@@ -77,18 +106,20 @@ Get today's date with `date +%F` before writing (used for `created`/`updated`).
      - **Exact/near duplicate** → don't create a second file. Offer to expand the existing
        entry instead, or skip if nothing new.
      - **Related but distinct** → create a new entry, and cross-link it via `Related`
-       (`[[slug]]`) in both files.
+       (relative repo-path markdown links, e.g. `[Title](../topic/slug.md)`) in both files.
      - **Genuinely new** → create a new entry; mention nearby topics if any.
    - When it's ambiguous (could append vs. could be new), **ask the user** which they prefer.
-3. **Write or update the entry:**
+3. **Vet for accuracy** per `## Accuracy & sourcing` — confirm or flag every factual
+   claim before writing; do not add anything you can't trace.
+4. **Write or update the entry:**
    - *New:* pick a topic folder (reuse an existing one if it fits, else make a new one),
      slugify the title, and write `entries/<topic>/<slug>.md` using the template above with
      real content drawn from the conversation. Set `created` and `updated` to today.
    - *Append:* edit the existing file — add to Details / Key points, add any new tags, and
      bump `updated` to today.
-4. **Rebuild the index:** `python3 $KB_ROOT/scripts/rebuild-index.py`
-5. **Sync to GitHub:** `bash $KB_ROOT/scripts/sync.sh "store: <title>"`
-6. **Confirm** to the user: the entry path, whether it was new or expanded, and a one-line summary.
+5. **Rebuild the index:** `python3 $KB_ROOT/scripts/rebuild-index.py`
+6. **Sync to GitHub:** `bash $KB_ROOT/scripts/sync.sh "store: <title>"`
+7. **Confirm** to the user: the entry path, whether it was new or expanded, and a one-line summary.
 
 ### 2. BROWSE  (the user wants to look something up or list what they have)
 
@@ -119,6 +150,10 @@ Get today's date with `date +%F` before writing (used for `created`/`updated`).
 
 - "Sync / pull my knowledge base from other devices": `bash $KB_ROOT/scripts/sync.sh --pull`
 - A normal store already commits + pushes via `sync.sh`.
+- **Conflicts are never auto-resolved or masked.** If a pull/rebase conflicts (or a push is
+  rejected), `sync.sh` stops and reports it — surface that to the user verbatim and let them
+  resolve it (`git rebase --continue` after fixing, or `git rebase --abort`). Do not edit the
+  conflicted files yourself.
 
 ## Conventions
 
