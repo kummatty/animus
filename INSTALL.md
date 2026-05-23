@@ -4,8 +4,9 @@
 
 ### 1. Clone the repo
 ```bash
-git clone https://github.com/kummatty/animus.git ~/animus
+git clone git@github.com:kummatty/animus.git ~/animus
 ```
+(Requires an SSH key registered with your GitHub account. HTTPS also works: `https://github.com/kummatty/animus.git`.)
 (The clone path can be anything — `~/animus` is just a suggestion.)
 
 ### 2. Symlink it into your personal skills directory
