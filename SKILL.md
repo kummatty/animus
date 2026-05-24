@@ -17,11 +17,15 @@ and synced across devices via GitHub.
 
 ## Location & layout
 
-`KB_ROOT = ~/.claude/skills/animus` (a symlink to the cloned repo — this path is identical on
-every device, so always reference it).
+The knowledge base lives at the absolute path `~/.claude/skills/animus` (a symlink to the
+cloned repo — identical on every device). **Always use this absolute path in shell commands.**
+This skill can be invoked from *any* project, so never assume the current working directory is
+the KB, and never use relative paths like `scripts/sync.sh` — they break when run from
+elsewhere. (The scripts themselves `cd` to this path first, so once invoked correctly they only
+ever act on the KB repo, never your current project.)
 
 ```
-$KB_ROOT/
+~/.claude/skills/animus/
 ├─ SKILL.md                         # this file
 ├─ INDEX.md                         # auto-generated catalog (do NOT hand-edit)
 ├─ entries/<topic>/<slug>.md        # one concept per file
@@ -32,7 +36,7 @@ $KB_ROOT/
 
 ## Entry format
 
-Every concept is one file: `$KB_ROOT/entries/<topic>/<slug>.md` where `<topic>` is a short
+Every concept is one file: `~/.claude/skills/animus/entries/<topic>/<slug>.md` where `<topic>` is a short
 lowercase folder (e.g. `networking`, `rust`, `economics`) and `<slug>` is a kebab-case title.
 
 ```markdown
@@ -98,10 +102,10 @@ facts against a primary source at store time.
 ### 1. STORE  (the user wants to save something)
 
 1. **Pull latest** (best-effort, so dedup sees other devices' entries):
-   `bash $KB_ROOT/scripts/sync.sh --pull`
+   `bash ~/.claude/skills/animus/scripts/sync.sh --pull`
 2. **Dedup check — do this before writing anything.**
-   - Read `$KB_ROOT/INDEX.md` to scan existing titles, topics, tags, and one-liners.
-   - Also `grep -ri "<key term>" $KB_ROOT/entries` for the concept's main keywords.
+   - Read `~/.claude/skills/animus/INDEX.md` to scan existing titles, topics, tags, and one-liners.
+   - Also `grep -ri "<key term>" ~/.claude/skills/animus/entries` for the concept's main keywords.
    - Decide which case applies and **tell the user what you found**:
      - **Exact/near duplicate** → don't create a second file. Offer to expand the existing
        entry instead, or skip if nothing new.
@@ -117,8 +121,8 @@ facts against a primary source at store time.
      real content drawn from the conversation. Set `created` and `updated` to today.
    - *Append:* edit the existing file — add to Details / Key points, add any new tags, and
      bump `updated` to today.
-5. **Rebuild the index:** `python3 $KB_ROOT/scripts/rebuild-index.py`
-6. **Sync to GitHub:** `bash $KB_ROOT/scripts/sync.sh "store: <title>"`
+5. **Rebuild the index:** `python3 ~/.claude/skills/animus/scripts/rebuild-index.py`
+6. **Sync to GitHub:** `bash ~/.claude/skills/animus/scripts/sync.sh "store: <title>"`
 7. **Confirm** to the user: the entry path, whether it was new or expanded, and a one-line summary.
 
 ### 2. BROWSE  (the user wants to look something up or list what they have)
@@ -148,7 +152,7 @@ facts against a primary source at store time.
 
 ### SYNC  (explicit)
 
-- "Sync / pull my knowledge base from other devices": `bash $KB_ROOT/scripts/sync.sh --pull`
+- "Sync / pull my knowledge base from other devices": `bash ~/.claude/skills/animus/scripts/sync.sh --pull`
 - A normal store already commits + pushes via `sync.sh`.
 - **Conflicts are never auto-resolved or masked.** If a pull/rebase conflicts (or a push is
   rejected), `sync.sh` stops and reports it — surface that to the user verbatim and let them
