@@ -288,3 +288,9 @@ VM-to-VM isolation actually matters for your workload.
 
 ## Related
 - [Isolation Models: Containers, gVisor, microVMs, and Full VMs](../virtualization/isolation-models.md) — the microVMs this networking plumbs; per-VM network namespaces tie back to the isolation spectrum there.
+- [Network Layers: L2 (Ethernet) vs L3 (IP)](network-layers-l2-l3.md) — the L2/L3 foundation this setup rests on.
+- [Ethernet Switching: ARP, MAC Learning, and the FDB](ethernet-switching-arp-fdb.md) — the concept behind VM↔VM bridge switching.
+- [IP Routing, Default Gateways, and ip_forward](ip-routing-and-gateways.md) — how the host routes VM traffic toward the uplink.
+- [Creating TAP Devices with ioctl on /dev/net/tun](tap-devices-and-ioctl.md) — the ioctl mechanism behind TAP creation.
+- [Connection Tracking (conntrack) and NAT/Masquerade](conntrack-and-nat.md) — the concept behind the masquerade rule and reply handling.
+- [Netfilter Hooks, nftables Rules, and the Forward Chain](netfilter-hooks-and-forward-rules.md) — the hook/chain model behind the NAT and forward rules.
